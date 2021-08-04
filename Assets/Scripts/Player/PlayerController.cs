@@ -10,6 +10,12 @@ public enum GameMode
     Dead,
     Complete
 }
+
+public enum ShootState
+{
+    Shooting, 
+    Collecting
+}
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance = null;
@@ -20,10 +26,15 @@ public class PlayerController : MonoBehaviour
     private ObjectManager objectManager;
     private PipeController pipeController;
 
+    private List<GameObject> bullets;
+
 
     private GameMode currentGameMode;
+    private ShootState currentShootState;
     public PlayerSettings PlayerSettings { get => playerSettings; }
     public GameMode CurrentGameMode { get => currentGameMode; set => currentGameMode = value; }
+    public List<GameObject> Bullets { get => bullets; set => bullets = value; }
+    public ShootState CurrentShootState { get => currentShootState; set => currentShootState = value; }
 
     private void Awake()
     {
@@ -46,6 +57,8 @@ public class PlayerController : MonoBehaviour
         gameManager.gameComplete += LaunchConfetti;
         gameManager.gameComplete += pipeController.DestroyPipe;
         gameManager.gameOver += pipeController.DestroyPipe;
+
+        bullets = new List<GameObject>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,6 +76,7 @@ public class PlayerController : MonoBehaviour
     private void GameComplete()
     {
         CurrentGameMode = GameMode.Complete;
+        LevelManager.Instance.LevelIndex++;
         Destroy(objectManager.Torus);
         transform.DOLookAt(Camera.main.transform.position, .3f);
         Invoke(Constants.SHOW_UI, 1.5f);
@@ -91,6 +105,28 @@ public class PlayerController : MonoBehaviour
     private void LaunchConfetti()
     {
         Instantiate(objectManager.Confetti, new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z + 1), transform.rotation);
+    }
+
+
+    public IEnumerator ShootBullet()
+    {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            print(bullets.Count);
+           
+        }
+
+        while (bullets.Count > 0)
+        {
+            yield return new WaitForSeconds(.5f);
+            bullets[0].SetActive(true);
+            bullets[0].transform.position = objectManager.Torus.transform.position;
+            bullets[0].GetComponent<Rigidbody>().AddForce(Vector3.forward * 1000);
+            Destroy(bullets[0], 3);
+            bullets.RemoveAt(0);
+            gameManager.BulletCount--;
+            canvasManager.UpdateBulletCount();
+        }
     }
 
 }

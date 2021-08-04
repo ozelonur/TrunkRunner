@@ -34,30 +34,15 @@ public class Bullet : MonoBehaviour, IProperty
     }
     public void Interact()
     {
-        if (!isCollided)
+        if (!isCollided && player.CurrentShootState == ShootState.Collecting)
         {
             isCollided = true;
             gameManager.BulletCount++;
+            player.Bullets.Add(gameObject);
             pipeController.RewindScale();
             canvasManager.UpdateBulletCount();
             transform.DOMove(objectManager.Torus.transform.position, .5f);
-            Invoke(Constants.HIDE_BULLET, .2f);
-            Invoke(Constants.SHOOT, 1.2f);
         }
     }
 
-    public void Shoot()
-    {
-        gameObject.SetActive(true);
-        transform.position = objectManager.Torus.transform.position;
-        bulletRigidBody.AddForce(Vector3.forward * bulletSpeed);
-        Destroy(gameObject, 3f);
-        gameManager.BulletCount--;
-        canvasManager.UpdateBulletCount();
-    }
-
-    public void HideBullet()
-    {
-        gameObject.SetActive(false);
-    }
 }

@@ -18,15 +18,9 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (level != null)
-        {
-            level = Resources.Load<Level>("Levels/Level" + LevelIndex);
-        }
-        else
-        {
-            LevelIndex = 1;
-            level = Resources.Load<Level>("Levels/Level" + LevelIndex);
-        }
+
+        print(LevelIndex);
+        level = Resources.Load<Level>("Levels/Level" + LevelIndex);
 
         Instantiate(level.LevelPrefab);
     }

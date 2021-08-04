@@ -33,14 +33,18 @@ public class PlayerMovement : MonoBehaviour
         firstPosition = Vector3.Lerp(firstPosition, mousePosition, .1f);
         if (Input.GetMouseButtonDown(0))
         {
+            player.CurrentShootState = ShootState.Collecting;
             MouseDown(Input.mousePosition);
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            player.CurrentShootState = ShootState.Shooting;
+            StartCoroutine(player.ShootBullet());
             MouseUp();
         }
         else if (Input.GetMouseButton(0))
         {
+            player.CurrentShootState = ShootState.Collecting;
             MouseHold(Input.mousePosition);
         }
 

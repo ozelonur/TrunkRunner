@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     {
         player = PlayerController.Instance;
         canvasManager = CanvasManager.Instance;
+        BulletCount = 0;
 
     }
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
             player.CurrentGameMode = GameMode.Playing;
             canvasManager.TapText.gameObject.SetActive(false);
         }
-        else if (player.CurrentGameMode == GameMode.Dead)
+        else if (player.CurrentGameMode == GameMode.Dead || player.CurrentGameMode == GameMode.Complete)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

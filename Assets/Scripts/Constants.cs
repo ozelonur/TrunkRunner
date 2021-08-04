@@ -16,7 +16,6 @@ public  static class Constants
 
     // Invokes
     public static string SHOW_UI = "ShowUI";
-    public static string SHOOT = "Shoot";
     public static string HIDE_BULLET = "HideBullet";
     public static string RESCALE_BONES = "RescaleBones";
 
